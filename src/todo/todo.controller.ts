@@ -1,3 +1,5 @@
+import { UpperAndFusionPipe } from './../pipes/upper-and-fusion.pipe';
+import { NOTFOUND } from 'dns';
 import { TodoService } from './todo.service';
 import { AddTodoDto } from './dto/addTodoDto';
 import { GetAllTodoDto } from './dto/getPaginetedTodoDto';
@@ -6,8 +8,9 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
+  HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -33,27 +36,45 @@ export class TodoController {
   @Get()
   getTodo(@Query() mesQueryParams: GetAllTodoDto): Todo[] {
     console.log('Récupérer la liste des todos');
+    console.log(mesQueryParams instanceof GetAllTodoDto);
 
     return this.TodoService.getTodos();
   }
 
   @Get('/:id')
-  getTodoById(@Param('id') id) {
-    this.TodoService.getTodoById(+id);
+  getTodoById(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.BAD_REQUEST,
+      }),
+    )
+    id,
+  ) {
+    this.TodoService.getTodoById(id);
   }
 
   @Post()
   addTodo(@Body() newTodo: AddTodoDto): Todo {
+    console.log(newTodo);
     return this.TodoService.addTodo(newTodo);
   }
 
   @Delete(':id')
-  deleteTodo(@Param('id') id) {
+  deleteTodo(@Param('id', ParseIntPipe) id) {
+    // console.log(typeof id);
     return this.TodoService.deleteTodo(+id);
   }
 
   @Put(':id')
-  modifierTodo(@Param('id') id, @Body() newTodo: Partial<AddTodoDto>) {
-    return this.TodoService.updateTodo(+id, newTodo);
+  modifierTodo(
+    @Param('id', ParseIntPipe) id,
+    @Body() newTodo: Partial<AddTodoDto>,
+  ) {
+    return this.TodoService.updateTodo(id, newTodo);
+  }
+  @Post('pipe')
+  testPipe(@Body(UpperAndFusionPipe) data) {
+    return data;
   }
 }
