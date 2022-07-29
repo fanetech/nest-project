@@ -1,3 +1,6 @@
+import { TodoService } from './todo.service';
+import { AddTodoDto } from './dto/addTodoDto';
+import { GetAllTodoDto } from './dto/getPaginetedTodoDto';
 import {
   Body,
   Controller,
@@ -16,10 +19,8 @@ import { Todo } from './entities/todo.entitie';
 
 @Controller('todo')
 export class TodoController {
-  constructor() {
-    this.todos = [];
-  }
-  todos: Todo[];
+  constructor(private TodoService: TodoService) {}
+
   @Get('v2')
   getTodoV2(@Req() request: Request, @Res() response: Response) {
     console.log('Récupérer la liste des todos');
@@ -30,53 +31,29 @@ export class TodoController {
   }
 
   @Get()
-  getTodo(@Query() mesQueryParams) {
+  getTodo(@Query() mesQueryParams: GetAllTodoDto): Todo[] {
     console.log('Récupérer la liste des todos');
-    console.log(mesQueryParams);
 
-    return this.todos;
+    return this.TodoService.getTodos();
   }
 
   @Get('/:id')
   getTodoById(@Param('id') id) {
-    const todo = this.todos.find((todo) => todo.id === +id);
-    console.log('get todo by id');
-    if (todo) return todo;
-    throw new NotFoundException("le todo n'existe pas");
+    this.TodoService.getTodoById(+id);
   }
 
   @Post()
-  addTodo(@Body() newTodo: Todo) {
-    if (this.todos.length) {
-      newTodo.id = this.todos[this.todos.length - 1].id + 1;
-    } else {
-      newTodo.id = 1;
-    }
-    this.todos.push(newTodo);
-    return newTodo;
+  addTodo(@Body() newTodo: AddTodoDto): Todo {
+    return this.TodoService.addTodo(newTodo);
   }
 
   @Delete(':id')
   deleteTodo(@Param('id') id) {
-    const index = this.todos.findIndex((todos) => todos.id === +id);
-    if (index > 0) {
-      this.todos.splice(index, 1);
-    } else {
-      throw new NotFoundException(`Le todo n'existe pas`);
-    }
-    console.log('Supprimer un todo de la liste des todos');
-    return {
-      message: `Le todo d'id ${id} à été supprimé avec succès`,
-      count: 1,
-    };
+    return this.TodoService.deleteTodo(+id);
   }
 
   @Put(':id')
-  modifierTodo(@Param('id') id, @Body() newTodo: Partial<Todo>) {
-    const todo = this.getTodoById(id);
-    console.log("Modifier l'un des todo de la liste des todos");
-    todo.name = newTodo.name ?? todo.name;
-    todo.description = newTodo.description ?? todo.description;
-    return todo;
+  modifierTodo(@Param('id') id, @Body() newTodo: Partial<AddTodoDto>) {
+    return this.TodoService.updateTodo(+id, newTodo);
   }
 }
