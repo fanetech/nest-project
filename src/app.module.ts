@@ -7,6 +7,6 @@ import { TodoModule } from './todo/todo.module';
   imports: [TodoModule],
   controllers: [AppController],
   providers: [AppService],
-  exports:[AppService]
+  exports: [AppService],
 })
 export class AppModule {}

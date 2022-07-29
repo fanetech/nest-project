@@ -3,6 +3,6 @@ import { TodoController } from './todo.controller';
 
 @Global()
 @Module({
-  controllers: [TodoController]
+  controllers: [TodoController],
 })
 export class TodoModule {}

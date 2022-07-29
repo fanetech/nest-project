@@ -3,8 +3,11 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
+  Param,
   Post,
   Put,
+  Query,
   Req,
   Res,
 } from '@nestjs/common';
@@ -27,10 +30,19 @@ export class TodoController {
   }
 
   @Get()
-  getTodo() {
+  getTodo(@Query() mesQueryParams) {
     console.log('Récupérer la liste des todos');
+    console.log(mesQueryParams);
 
     return this.todos;
+  }
+
+  @Get('/:id')
+  getTodoById(@Param('id') id) {
+    const todo = this.todos.find((todo) => todo.id === +id);
+    console.log('get todo by id');
+    if (todo) return todo;
+    throw new NotFoundException("le todo n'existe pas");
   }
 
   @Post()
@@ -44,15 +56,27 @@ export class TodoController {
     return newTodo;
   }
 
-  @Delete()
-  deleteTodo() {
+  @Delete(':id')
+  deleteTodo(@Param('id') id) {
+    const index = this.todos.findIndex((todos) => todos.id === +id);
+    if (index > 0) {
+      this.todos.splice(index, 1);
+    } else {
+      throw new NotFoundException(`Le todo n'existe pas`);
+    }
     console.log('Supprimer un todo de la liste des todos');
-    return 'Delete Todo';
+    return {
+      message: `Le todo d'id ${id} à été supprimé avec succès`,
+      count: 1,
+    };
   }
 
-  @Put()
-  modifierTodo() {
+  @Put(':id')
+  modifierTodo(@Param('id') id, @Body() newTodo: Partial<Todo>) {
+    const todo = this.getTodoById(id);
     console.log("Modifier l'un des todo de la liste des todos");
-    return 'Update Todo';
+    todo.name = newTodo.name ?? todo.name;
+    todo.description = newTodo.description ?? todo.description;
+    return todo;
   }
 }
