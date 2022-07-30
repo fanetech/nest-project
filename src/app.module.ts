@@ -1,6 +1,13 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FirstMiddleware } from './middelwares/first.middleware';
+import { logger } from './middelwares/logger.middelware';
 import { TodoModule } from './todo/todo.module';
 
 @Module({
@@ -9,4 +16,17 @@ import { TodoModule } from './todo/todo.module';
   providers: [AppService],
   exports: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(FirstMiddleware, logger).forRoutes(
+      {
+        path: 'todo',
+        method: RequestMethod.GET,
+      },
+      {
+        path: 'todo*',
+        method: RequestMethod.DELETE,
+      },
+    );
+  }
+}

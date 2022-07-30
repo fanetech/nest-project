@@ -36,7 +36,6 @@ export class TodoController {
   @Get()
   getTodo(@Query() mesQueryParams: GetAllTodoDto): Todo[] {
     console.log('Récupérer la liste des todos');
-    console.log(mesQueryParams instanceof GetAllTodoDto);
 
     return this.TodoService.getTodos();
   }
@@ -56,7 +55,6 @@ export class TodoController {
 
   @Post()
   addTodo(@Body() newTodo: AddTodoDto): Todo {
-    console.log(newTodo);
     return this.TodoService.addTodo(newTodo);
   }
 
