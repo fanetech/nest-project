@@ -1,3 +1,4 @@
+import { HelmetMiddleware } from '@nest-middlewares/helmet';
 import {
   MiddlewareConsumer,
   Module,
@@ -18,15 +19,21 @@ import { TodoModule } from './todo/todo.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FirstMiddleware, logger).forRoutes(
-      {
-        path: 'todo',
-        method: RequestMethod.GET,
-      },
-      {
-        path: 'todo*',
-        method: RequestMethod.DELETE,
-      },
-    );
+    consumer
+      .apply(FirstMiddleware, logger)
+      .forRoutes(
+        {
+          path: 'todo',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'todo*',
+          method: RequestMethod.DELETE,
+        },
+      )
+      .apply(logger)
+      .forRoutes('')
+      .apply(HelmetMiddleware)
+      .forRoutes('');
   }
 }

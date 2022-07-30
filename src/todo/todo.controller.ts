@@ -16,10 +16,12 @@ import {
   Query,
   Req,
   Res,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Todo } from './entities/todo.entitie';
 
+// @UseInterceptors(DurationInterceptor)
 @Controller('todo')
 export class TodoController {
   constructor(private TodoService: TodoService) {}
