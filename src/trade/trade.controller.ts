@@ -23,6 +23,7 @@ export class TradeController {
     } else {
       trade.id = 1;
     }
+    trade.date = new Date();
     this.trades.push(trade);
 
     return trade;
