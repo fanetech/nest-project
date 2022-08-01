@@ -10,9 +10,11 @@ import { AppService } from './app.service';
 import { FirstMiddleware } from './middelwares/first.middleware';
 import { logger } from './middelwares/logger.middelware';
 import { TodoModule } from './todo/todo.module';
+import { FaneModule } from './fane/fane.module';
+import { TradeModule } from './trade/trade.module';
 
 @Module({
-  imports: [TodoModule],
+  imports: [TodoModule, FaneModule, TradeModule],
   controllers: [AppController],
   providers: [AppService],
   exports: [AppService],
