@@ -1,3 +1,4 @@
+import { TimesTampEntities } from 'Generic/timstamp.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity('cv')
-export class CvEntity {
+export class CvEntity extends TimesTampEntities {
   @PrimaryGeneratedColumn()
   id: number;
 
