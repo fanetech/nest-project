@@ -12,9 +12,26 @@ import { logger } from './middelwares/logger.middelware';
 import { TodoModule } from './todo/todo.module';
 import { FaneModule } from './fane/fane.module';
 import { TradeModule } from './trade/trade.module';
+import * as dotenv from 'dotenv';
+import { TypeOrmModule } from '@nestjs/typeorm';
+dotenv.config();
 
 @Module({
-  imports: [TodoModule, FaneModule, TradeModule],
+  imports: [
+    TodoModule,
+    FaneModule,
+    TradeModule,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [],
+      synchronize: true,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
   exports: [AppService],
