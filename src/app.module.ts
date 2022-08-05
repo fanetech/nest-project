@@ -15,7 +15,6 @@ import { TradeModule } from './trade/trade.module';
 import * as dotenv from 'dotenv';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CvModule } from './cv/cv.module';
-import { CvEntity } from './cv/entities/cv.entity';
 dotenv.config();
 
 @Module({
@@ -31,7 +30,6 @@ dotenv.config();
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: ['dist/**/*.entity{.ts,.js}'],
-      // entities: [CvEntity],
       synchronize: true,
     }),
     CvModule,

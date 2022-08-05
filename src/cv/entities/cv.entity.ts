@@ -1,12 +1,5 @@
 import { TimesTampEntities } from 'Generic/timstamp.entity';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('cv')
 export class CvEntity extends TimesTampEntities {
@@ -35,13 +28,4 @@ export class CvEntity extends TimesTampEntities {
 
   @Column()
   path: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 }
