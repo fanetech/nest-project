@@ -31,4 +31,15 @@ export class CvService {
   updateCv2(updateCreateria, cv: UpdateDto) {
     return this.cvRepository.update(updateCreateria, cv);
   }
+
+  async removeCv(id) {
+    const cvToRemove = await this.cvRepository.findOne(id);
+    if (!cvToRemove) {
+      throw new NotFoundException('Cv inconnu');
+    }
+    return await this.cvRepository.remove(cvToRemove);
+  }
+  async removeCv2(id: number) {
+    return this.cvRepository.delete(id);
+  }
 }

@@ -3,6 +3,7 @@ import { CvEntity } from './entities/cv.entity';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -39,5 +40,10 @@ export class CvController {
       updateObject.updateCreateria,
       updateObject.updateCvDto,
     );
+  }
+
+  @Delete(':id')
+  async deleteCv(@Param('id', ParseIntPipe) id: number) {
+    return this.cvService.removeCv2(id);
   }
 }
