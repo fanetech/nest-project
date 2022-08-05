@@ -32,4 +32,12 @@ export class CvController {
   ): Promise<CvEntity> {
     return await this.cvService.updateCv(id, updateCvDto);
   }
+
+  @Patch()
+  async updateCv2(@Body() updateObject) {
+    return await this.cvService.updateCv2(
+      updateObject.updateCreateria,
+      updateObject.updateCvDto,
+    );
+  }
 }

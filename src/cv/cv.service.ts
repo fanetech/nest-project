@@ -1,5 +1,5 @@
 import { UpdateDto } from './dto/Update-cv.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AddCvDto } from './dto/Add-cv.dto';
@@ -23,6 +23,12 @@ export class CvService {
       id,
       ...cv,
     });
+    if (!newCv) {
+      throw new NotFoundException('Cv inconnu');
+    }
     return await this.cvRepository.save(newCv);
+  }
+  updateCv2(updateCreateria, cv: UpdateDto) {
+    return this.cvRepository.update(updateCreateria, cv);
   }
 }
