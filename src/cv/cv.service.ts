@@ -11,6 +11,14 @@ export class CvService {
     @InjectRepository(CvEntity)
     private cvRepository: Repository<CvEntity>,
   ) {}
+
+  async findCvById(id) {
+    const cv = await this.cvRepository.findOne(id);
+    if (!cv) {
+      throw new NotFoundException('cv inconnu');
+    }
+    return cv;
+  }
   async getCvs(): Promise<CvEntity[]> {
     return await this.cvRepository.find();
   }
@@ -33,13 +41,22 @@ export class CvService {
   }
 
   async removeCv(id) {
-    const cvToRemove = await this.cvRepository.findOne(id);
-    if (!cvToRemove) {
-      throw new NotFoundException('Cv inconnu');
-    }
+    const cvToRemove = await this.findCvById(id);
     return await this.cvRepository.remove(cvToRemove);
   }
   async removeCv2(id: number) {
     return this.cvRepository.delete(id);
+  }
+
+  async softRemove(id) {
+    const cvToremove = await this.findCvById(id);
+
+    return await this.cvRepository.softRemove(cvToremove);
+  }
+  async recoverCv(id) {
+    return await this.cvRepository.restore(id);
+  }
+  async softDelete(id) {
+    return this.cvRepository.softDelete(id);
   }
 }
