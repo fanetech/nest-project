@@ -59,4 +59,16 @@ export class CvService {
   async softDelete(id) {
     return this.cvRepository.softDelete(id);
   }
+
+  //custom request
+  async statCvNumberByAge(maxAge, minAge = 0) {
+    const qb = this.cvRepository.createQueryBuilder('cv');
+
+    qb.select('cv.age , count(cv.id) as nomberDeCv')
+      .where('cv.age > :minAge and cv.age < :maxAge')
+      .setParameters({ maxAge, minAge })
+      .groupBy('cv.age');
+    console.log(qb.getSql());
+    return await qb.getRawMany();
+  }
 }
