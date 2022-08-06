@@ -15,6 +15,7 @@ import { TradeModule } from './trade/trade.module';
 import * as dotenv from 'dotenv';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CvModule } from './cv/cv.module';
+import { UserModule } from './user/user.module';
 dotenv.config();
 
 @Module({
@@ -33,6 +34,7 @@ dotenv.config();
       synchronize: true,
     }),
     CvModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
