@@ -1,3 +1,4 @@
+import { UserRoleEnum } from './../../enums/user-role.enum';
 import { type } from 'os';
 import { CvEntity } from './../../cv/entities/cv.entity';
 import { TimesTampEntities } from 'Generic/timstamp.entity';
@@ -19,10 +20,23 @@ export class UserEntity extends TimesTampEntities {
   })
   email: string;
 
+  @Column()
+  password: string;
+
+  @Column()
+  salt: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRoleEnum,
+    default: UserRoleEnum.USER,
+  })
+  role: string;
+
   @OneToMany((type) => CvEntity, (cv) => cv.user, {
+    eager: true,
     cascade: true,
     nullable: true,
-    eager: true,
   })
   cvs: CvEntity;
 }
