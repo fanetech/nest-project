@@ -13,7 +13,11 @@ export class CvService {
   ) {}
 
   async findCvById(id) {
-    const cv = await this.cvRepository.findOne(id);
+    const cv = await this.cvRepository.findOne({ 
+      where: { 
+        id: id 
+      } 
+    });
     if (!cv) {
       throw new NotFoundException('cv inconnu');
     }

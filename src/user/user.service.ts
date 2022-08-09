@@ -33,6 +33,9 @@ export class UserService {
     delete user.salt;
     return user;
   }
+  async test(){
+    return "est"
+  }
 
   async login(credential: LoginCredentialDto) {
     const { username, password } = credential;

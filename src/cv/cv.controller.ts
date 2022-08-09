@@ -57,9 +57,9 @@ export class CvController {
     return await this.cvService.updateCv(id, updateCvDto);
   }
 
-  @Get('/recover/:id')
+  @Get('/remove/:id')
   async recoverCv(@Param('id', ParseIntPipe) id: number) {
-    return this.cvService.recoverCv(id);
+    return this.cvService.removeCv(id);
   }
   @Delete(':id')
   async deleteCv(@Param('id', ParseIntPipe) id: number) {

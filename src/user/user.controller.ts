@@ -1,7 +1,7 @@
 import { UserService } from './user.service';
 import { UserEntity } from './entites/user.entity';
 import { UserSubscriberDto } from './dto/User-subscriber.dto';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { LoginCredentialDto } from './dto/login-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 
@@ -23,5 +23,10 @@ export class UserController {
     @Body() credential: LoginCredentialDto
   ){
     return this.userService.login(credential)
+  }
+
+  @Get("test")
+  async test(){
+    return "test"
   }
 }
