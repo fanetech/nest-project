@@ -1,0 +1,5 @@
+{
+    "thunder-client.saveToWorkspace": true,
+    "thunder-client.showActivityFromCollection": true,
+    "thunder-client.responseLimit": 20
+}

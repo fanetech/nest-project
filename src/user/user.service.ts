@@ -33,8 +33,9 @@ export class UserService {
     delete user.salt;
     return user;
   }
-  async test(){
-    return "est"
+  async getAllUser(): Promise<UserEntity[]>{
+    const users = await this.userRepository.find()
+    return users
   }
 
   async login(credential: LoginCredentialDto) {
@@ -52,7 +53,7 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, (await user).salt);
     if (hashedPassword === (await user).password) {
       const payload = {
-        username,
+        username:(await user).username,
         email: (await user).email,
         role: (await user).role,
       }

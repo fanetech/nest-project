@@ -10,6 +10,10 @@ export class UserController {
   constructor(private userService: UserService, private jwtService: JwtService) {}
 
 
+  @Get()
+  async getAllUser():Promise<UserEntity[]>{
+    return await this.userService.getAllUser()
+  }
   @Post("register")
   async register(
     @Body() userData: UserSubscriberDto,

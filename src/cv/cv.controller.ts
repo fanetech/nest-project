@@ -9,15 +9,18 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CvService } from './cv.service';
 import { UpdateDto } from './dto/Update-cv.dto';
+import { JwtAuthGuard } from 'src/user/Guards/jwt-auth.guard';
 
 @Controller('cv')
 export class CvController {
   constructor(private cvService: CvService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getAllCvs(): Promise<CvEntity[]> {
     return await this.cvService.getCvs();
   }
