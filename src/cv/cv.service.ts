@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AddCvDto } from './dto/Add-cv.dto';
 import { CvEntity } from './entities/cv.entity';
+import { UserEntity } from 'src/user/entites/user.entity';
 
 @Injectable()
 export class CvService {
@@ -23,12 +24,18 @@ export class CvService {
     }
     return cv;
   }
-  async getCvs(): Promise<CvEntity[]> {
-    return await this.cvRepository.find();
+  async getCvs(user): Promise<CvEntity[]> {
+    return await this.cvRepository.find({ 
+      where: { 
+        user: user 
+      } 
+    });
   }
 
-  async addCv(cv: AddCvDto): Promise<CvEntity> {
-    return await this.cvRepository.save(cv);
+  async addCv(cv: AddCvDto, user): Promise<CvEntity> {
+    const newCv = this.cvRepository.create(cv)
+    newCv.user = user
+    return await this.cvRepository.save(newCv);
   }
   async updateCv(id: number, cv: UpdateDto): Promise<CvEntity> {
     const newCv = await this.cvRepository.preload({

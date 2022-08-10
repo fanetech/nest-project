@@ -22,15 +22,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: PayloadInterface) {
-    const user = await this.userRpository.findOne({ 
+    const userFind = await this.userRpository.findOne({ 
         where: { 
           username: payload.username 
         } 
       })
 
-    if(user){
-      const {password, salt, ...result} = user
-      return result
+    if(userFind){
+      const {password, salt, ...user} = userFind
+      return user
     }else{
       throw new UnauthorizedException("Utilisateur nos authentifier")
     }

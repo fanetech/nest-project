@@ -9,28 +9,38 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { CvService } from './cv.service';
 import { UpdateDto } from './dto/Update-cv.dto';
 import { JwtAuthGuard } from 'src/user/Guards/jwt-auth.guard';
+import { Request } from 'express';
+import { User } from 'src/decorators/user.decorator';
 
 @Controller('cv')
+
 export class CvController {
+
   constructor(private cvService: CvService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getAllCvs(): Promise<CvEntity[]> {
-    return await this.cvService.getCvs();
+  async getAllCvs(@User() user): Promise<CvEntity[]> {
+   
+    return await this.cvService.getCvs(user);
   }
 
   @Post()
-  async addCv(@Body() addCvDto: AddCvDto): Promise<CvEntity> {
-    return await this.cvService.addCv(addCvDto);
+  @UseGuards(JwtAuthGuard)
+  async addCv(@Body() addCvDto: AddCvDto, @Req() request:Request): Promise<CvEntity> {
+    const user = request.user
+    console.log(user)
+    return await this.cvService.addCv(addCvDto, user);
   }
 
   @Patch()
+  @UseGuards(JwtAuthGuard)
   async updateCv2(@Body() updateObject) {
     return await this.cvService.updateCv2(
       updateObject.updateCreateria,
@@ -53,6 +63,7 @@ export class CvController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async updateCv(
     @Body() updateCvDto: UpdateDto,
     @Param('id', ParseIntPipe) id: number,
@@ -61,10 +72,12 @@ export class CvController {
   }
 
   @Get('/remove/:id')
+  @UseGuards(JwtAuthGuard)
   async recoverCv(@Param('id', ParseIntPipe) id: number) {
     return this.cvService.removeCv(id);
   }
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async deleteCv(@Param('id', ParseIntPipe) id: number) {
     return this.cvService.softDelete(id);
   }
